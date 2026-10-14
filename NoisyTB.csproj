@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>tim_break.NoisyTB</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Tim Break</Authors>
+    <Description>A simple 2D noise library. White noise, gradient noise, jittered gradient noise, gradient noise with domain warping, FBM gradient noise, and voronoi noise are implemented.</Description>
+    <PackageTags>noise;procedural;white;gradient;domain_warping;fbm;voronoi;math;generation;heightmap</PackageTags>
+  </PropertyGroup>
+
+</Project>
