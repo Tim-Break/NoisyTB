@@ -1,7 +1,7 @@
 # NoiseTB
 This is my simple library of two‑dimensional noises.
 <br>
-<img width="370" height="370" alt="Noises" src="https://github.com/user-attachments/assets/36eae9b6-521c-4350-b110-f651fd255a8e" />
+<img width="370" height="370" alt="Noises" src="https://github.com/user-attachments/assets/e8d7c77a-695d-4b44-beab-472479adabb3" />
 ## Noises
 ### 1. White Noise
 <img width="370" height="370" alt="White noise" src="https://github.com/user-attachments/assets/012f93ac-1440-48ef-8e5e-61b1b97809c7" />
