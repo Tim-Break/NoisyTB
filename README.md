@@ -6,7 +6,7 @@ This is my simple library of two‑dimensional noises.
 ### 1. White Noise
 <img width="370" height="370" alt="White noise" src="https://github.com/user-attachments/assets/012f93ac-1440-48ef-8e5e-61b1b97809c7" />
 <br>
-The following code* was used to generate this image:
+The following code<sup>1</sup> was used to generate this image:
 
 ```csharp
 for (int x = 0; x < 1000; x++)
@@ -23,7 +23,7 @@ for (int x = 0; x < 1000; x++)
 ### Gradient Noise
 <img width="370" height="370" alt="Gradient noise" src="https://github.com/user-attachments/assets/f41e37a0-d40e-4107-94ea-941597a3b295" />
 <br>
-The following code* was used to generate this image:
+The following code<sup>1</sup> was used to generate this image:
 
 ```csharp
 for (int x = 0; x < 1000; x++)
@@ -51,3 +51,5 @@ for (int x = 0; x < 1000; x++)
 
 ### Voronoi Noise
 <br>
+
+<sup>1</sup>This code shows how to obtain the noise value at a certain point, but it doesn’t show how to generate an image.
