@@ -53,5 +53,15 @@ namespace TimBreak.NoiseTB.Utilities
         {
             return t * t * t * (t * (t * 6 - 15) + 10);
         }
+
+        public static float FClamp(float x, float min, float max)
+        {
+            return MathF.Max(MathF.Min(x, max), min);
+        }
+
+        public static float FClamp01(float x)
+        {
+            return MathF.Max(MathF.Min(x, 1), 0);
+        }
     }
 }
