@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.340.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoisyTB", "NoisyTB\NoisyTB.csproj", "{5949F5CF-9840-E12B-8314-47614DCC6600}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{5EEFF4DA-8AD9-E42C-6F15-4A668E5D6006}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5949F5CF-9840-E12B-8314-47614DCC6600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5949F5CF-9840-E12B-8314-47614DCC6600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5949F5CF-9840-E12B-8314-47614DCC6600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5949F5CF-9840-E12B-8314-47614DCC6600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EEFF4DA-8AD9-E42C-6F15-4A668E5D6006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EEFF4DA-8AD9-E42C-6F15-4A668E5D6006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EEFF4DA-8AD9-E42C-6F15-4A668E5D6006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EEFF4DA-8AD9-E42C-6F15-4A668E5D6006}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D763E95F-13D3-4EE9-8C4C-AB42E7D85A33}
+	EndGlobalSection
+EndGlobal
