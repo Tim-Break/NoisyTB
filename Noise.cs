@@ -1,18 +1,10 @@
 ﻿using System.Numerics;
+using TimBreak.NoiseTB.Utilities;
 
 namespace TimBreak.NoiseTB
 {
     public static class Noise
     {
-        /// <summary>
-        /// Maps value from (-1,1) to (0,1)
-        /// </summary>
-        /// <returns>value * .5f + .5f</returns>
-        public static float To01(float value)
-        {
-            return value * .5f + .5f;
-        }
-
         static Vector2 GradHash0(int x, int y, int seed)
         {
             long h = (x * 2412564L + y * 7865245L + seed * 4262455264235) & 0xffffffff;
@@ -58,29 +50,6 @@ namespace TimBreak.NoiseTB
             return new Vector2(ox, oy);
         }
 
-        static float Lerp(float time, float v0, float v1)
-        {
-            return v0 * (1 - time) + v1 * time;
-        }
-
-        static float Serp(Vector2 point, float v00, float v01, float v10, float v11)
-        {
-            float x1 = Lerp(point.X, v00, v10);
-            float x2 = Lerp(point.X, v01, v11);
-            return Lerp(point.Y, x1, x2);
-        }
-
-        static Vector2 SafeNormalize(Vector2 v)
-        {
-            if (v == Vector2.Zero) return new Vector2(1, 0);
-            return Vector2.Normalize(v);
-        }
-
-        static float Fade(float t)
-        {
-            return t * t * t * (t * (t * 6 - 15) + 10);
-        }
-
         /// <summary>
         /// Just a white noise.
         /// </summary>
@@ -121,18 +90,18 @@ namespace TimBreak.NoiseTB
             float d10 = Vector2.Dot(v10, t - new Vector2(1, 0));
             float d11 = Vector2.Dot(v11, t - new Vector2(1, 1));
 
-            Vector2 fade = new(Fade(t.X), Fade(t.Y));
+            Vector2 fade = new(MathUtilities.Fade(t.X), MathUtilities.Fade(t.Y));
 
-            return Serp(fade, d00, d01, d10, d11);
+            return MathUtilities.Blerp(fade, d00, d01, d10, d11);
         }
 
         /// <summary>
         /// I don’t know how to describe it.
         /// </summary>
         /// <param name="point">Sample point</param>
-        /// <param name="jitterStrength">The deflection force of the vertices of the vector grid</param>
+        /// <param name="jitterStrength">The deflection strength of the vertices of the vector grid</param>
         /// <param name="seed">Noise seed</param>
-        /// <returns>Float value from -1 to 1</returns>
+        /// <returns>Float value (from -1 to 1, if jitterStrength equals 0)</returns>
         public static float JitteredGradient(Vector2 point, float jitterStrength=.2f, int seed=42)
         {
             Vector2 pFloor = new(MathF.Floor(point.X), MathF.Floor(point.Y));
@@ -148,9 +117,9 @@ namespace TimBreak.NoiseTB
             float d10 = Vector2.Dot(v10, t - new Vector2(1, 0) - GradHash1((int)pFloor.X+1, (int)pFloor.Y, seed) * jitterStrength);
             float d11 = Vector2.Dot(v11, t - new Vector2(1, 1) - GradHash1((int)pFloor.X+1, (int)pFloor.Y+1, seed)*jitterStrength);
 
-            Vector2 fade = new(Fade(t.X), Fade(t.Y));
+            Vector2 fade = new(MathUtilities.Fade(t.X), MathUtilities.Fade(t.Y));
 
-            return Serp(fade, d00, d01, d10, d11);
+            return MathUtilities.Blerp(fade, d00, d01, d10, d11);
         }
 
         /// <summary>
@@ -174,8 +143,8 @@ namespace TimBreak.NoiseTB
         /// </summary>
         /// <param name="point">Sample point</param>
         /// <param name="octaves">Octaves count</param>
-        /// <param name="persistence">By how many times will the amplitude decrease with each octave</param>
-        /// <param name="lacunarity">By how many times will the frequency increase with each octave</param>
+        /// <param name="persistence">By how many times will the amplitude change with each octave</param>
+        /// <param name="lacunarity">By how many times will the frequency change with each octave</param>
         /// <param name="seed">Noise seed</param>
         /// <returns>Float value from -1 to 1</returns>
         public static float FBM(Vector2 point, int octaves=6, float persistence=.5f, float lacunarity = 2f, int seed=42)
@@ -203,12 +172,12 @@ namespace TimBreak.NoiseTB
         /// It produces beautiful images when warpStrength is crazy (about 5).
         /// </summary>
         /// <param name="point">Sample point</param>
-        /// <param name="jitterStrength">The deflection force of the vertices of the vector grid</param>
+        /// <param name="jitterStrength">The deflection strength of the vertices of the vector grid</param>
         /// <param name="octaves">Octaves count</param>
         /// <param name="persistence">By how many times will the amplitude decrease with each octave</param>
         /// <param name="lacunarity">By how many times will the frequency increase with each octave</param>
         /// <param name="seed">Noise seed</param>
-        /// <returns>Float value from -1 to 1</returns>
+        /// <returns>Float value (from -1 to 1, if jitterStrength equals 0)</returns>
         public static float JitteredFBM(Vector2 point, float jitterStrength=.2f, int octaves=6, float persistence=.5f, float lacunarity = 2f, int seed=42)
         {
             float value = 0;
@@ -263,7 +232,42 @@ namespace TimBreak.NoiseTB
         }
 
         /// <summary>
-        /// Voronoi noise, but only f1 (distance to nearest feature point) returned
+        /// Voronoi noise, but results are squared. Faster than Voronoi().
+        /// </summary>
+        /// <param name="point">Sample point</param>
+        /// <param name="offsetStrength">How much are the points deviated from the uniform grid</param>
+        /// <param name="seed">Noise seed</param>
+        /// <returns>f1 - squared distance to nearest feature point; f2 - squared distance to second nearest feature point</returns>
+        public static (float f1, float f2) VoronoiSquared(Vector2 point, float offsetStrength=1f, int seed=42)
+        {
+            int x = (int)MathF.Floor(point.X);
+            int y = (int)MathF.Floor(point.Y);
+
+            float f1 = float.MaxValue;
+            float f2 = float.MaxValue;
+
+            for (int xo = -1; xo <= 1; xo++)
+            {
+                int cx = x + xo;
+                for (int yo = -1; yo <= 1; yo++)
+                {
+                    int cy = y + yo;
+                    Vector2 feature = new Vector2(cx, cy) + VoronoiHash(cx, cy, seed) * offsetStrength;
+                    float sqrD = Vector2.DistanceSquared(point, feature);
+                    if (sqrD < f1)
+                    {
+                        f2 = f1;
+                        f1 = sqrD;
+                    } else if (sqrD < f2)
+                        f2 = sqrD;
+                }
+            }
+
+            return (f1, f2);
+        }
+
+        /// <summary>
+        /// Voronoi noise, but only f1 (distance to nearest feature point) returned.
         /// </summary>
         /// <param name="point">Sample point</param>
         /// <param name="offsetStrength">How much are the points deviated from the uniform grid</param>
@@ -275,7 +279,7 @@ namespace TimBreak.NoiseTB
         }
 
         /// <summary>
-        /// Voronoi noise, but f2 - f1 returned
+        /// Voronoi noise, but f2 - f1 returned.
         /// </summary>
         /// <param name="point">Sample point</param>
         /// <param name="offsetStrength">How much are the points deviated from the uniform grid</param>

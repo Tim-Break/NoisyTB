@@ -1,5 +1,5 @@
 # NoiseTB
-This is my simple library of two‑dimensional noises.
+This is my simple library of two‑dimensional noises and world heightmap generator.
 <br>
 <img width="370" height="370" alt="Noises" src="https://github.com/user-attachments/assets/36eae9b6-521c-4350-b110-f651fd255a8e" />
 ## Noises
